@@ -1,0 +1,54 @@
+<project name="brainfuck" default="deploy">
+
+    <property name="dir.build" value="../.build"/>
+
+    <property name="dir.classes" value="${dir.build}/classes"/>
+
+    <property name="dir.src" value="../src/"/>
+
+    <property name="dir.lib" value="../lib"/>
+
+    <property name="dir.res" value="../res"/>
+
+    <property name="dir.bin" value="../bin"/>
+
+    <property name="out.jar" value="${dir.bin}/brainfuck.jar"/>
+
+    <path id="libs.logger">
+        <fileset dir="${dir.lib}/">
+            <include name="log*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="libs.main.module">
+        <path refid="libs.logger"/>
+    </path>
+
+    <target name="clean">
+        <delete dir="${dir.build}"/>
+    </target>
+
+    <target name="mkdirs">
+        <mkdir dir="${dir.classes}"/>
+        <mkdir dir="${dir.bin}"/>
+    </target>
+
+    <target name="compile" depends="mkdirs">
+        <javac srcdir="${dir.src}" destdir="${dir.classes}">
+            <classpath>
+                <path refid="libs.main.module"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="deploy" depends="compile">
+        <jar destfile="${out.jar}" basedir="${dir.classes}">
+            <fileset dir="${dir.res}"/>
+            <zipgroupfileset dir="${dir.lib}" includes="log*.jar" />
+            <manifest>
+                <attribute name="Main-Class" value="ru.nsu.saltuk.brainfucklauncher.Launcher" />
+            </manifest>
+        </jar>
+    </target>
+
+</project>
